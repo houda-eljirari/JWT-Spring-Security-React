@@ -1,0 +1,28 @@
+@'
+# Java
+*.class
+*.log
+
+# Maven
+backend/target/
+
+# React / Node.js
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# Environnement et secrets
+.env
+.env.*
+!.env.example
+application-local.properties
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Système
+.DS_Store
+Thumbs.db
+'@ | Set-Content -Encoding UTF8 .gitignore
