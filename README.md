@@ -1,4 +1,3 @@
-@'
 # Gestion des incidents informatiques
 
 Application web de gestion et de suivi des incidents informatiques et de cybersécurité.
@@ -34,4 +33,3 @@ Application web de gestion et de suivi des incidents informatiques et de cybers�
 ## Lancement
 
 Les instructions de lancement seront ajoutées après la configuration du backend et du frontend.
-'@ | Set-Content -Encoding UTF8 README.md
