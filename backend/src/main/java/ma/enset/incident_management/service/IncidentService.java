@@ -90,16 +90,22 @@ public class IncidentService {
 
     @Transactional(readOnly = true)
     public List<IncidentResponse> getAssignedIncidents(Authentication authentication) {
-        User technician = getConnectedUser(authentication);
+        User user = getConnectedUser(authentication);
 
-        if (!technician.getRole().name().equals("TECHNICIAN")
-                && !technician.getRole().name().equals("ADMIN")) {
+        if (user.getRole().name().equals("ADMIN")) {
+            return incidentRepository.findAllByOrderByCreatedAtDesc()
+                    .stream()
+                    .map(this::toResponse)
+                    .toList();
+        }
+
+        if (!user.getRole().name().equals("TECHNICIAN")) {
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN,
                     "Accès réservé aux techniciens et administrateurs");
         }
 
-        return incidentRepository.findByTechnicianId(technician.getId())
+        return incidentRepository.findByTechnicianId(user.getId())
                 .stream()
                 .map(this::toResponse)
                 .toList();

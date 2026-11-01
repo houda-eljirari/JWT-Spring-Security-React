@@ -69,10 +69,17 @@ class JwtServiceTest {
     void shouldRejectTamperedToken() {
         String token = jwtService.generateToken(userDetails);
 
-        int lastIndex = token.length() - 1;
-        char replacement = token.charAt(lastIndex) == 'a' ? 'b' : 'a';
+        String[] parts = token.split("\\.");
+        String signature = parts[2];
 
-        String tamperedToken = token.substring(0, lastIndex) + replacement;
+        char original = signature.charAt(0);
+        char replacement = original == 'A' ? 'B' : 'A';
+
+        String tamperedSignature =
+                replacement + signature.substring(1);
+
+        String tamperedToken =
+                parts[0] + "." + parts[1] + "." + tamperedSignature;
 
         assertFalse(jwtService.isTokenValid(tamperedToken, userDetails));
     }

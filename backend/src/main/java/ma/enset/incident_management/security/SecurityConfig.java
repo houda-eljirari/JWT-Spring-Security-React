@@ -41,6 +41,22 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/h2-console/**").permitAll()
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.PUT,
+                                "/api/incidents/*/assign"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.PUT,
+                                "/api/incidents/*/status"
+                        ).hasAnyRole("TECHNICIAN", "ADMIN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.GET,
+                                "/api/incidents/assigned"
+                        ).hasAnyRole("TECHNICIAN", "ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .headers(headers ->
