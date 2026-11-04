@@ -193,16 +193,61 @@ The production build completes successfully with Vite.
 
 ## Application Screenshots
 
-Screenshots can be added here to demonstrate the main application features.
+The following screenshots demonstrate the main features and workflows of the Incident Management System.
 
-| Login | Dashboard |
+### 1. Authentication
+
+| Login Page | Registration Page |
 |---|---|
-| <!-- Add login screenshot --> | <!-- Add dashboard screenshot --> |
+| ![Login Page](screenshots/01-login-page.png) | ![Registration Page](screenshots/02-registration-page.png) |
 
-| Incident Management | Incident Details |
+### 2. Employee Interface
+
+| Employee Dashboard | Create Incident |
 |---|---|
-| <!-- Add incidents screenshot --> | <!-- Add incident details screenshot --> |
+| ![Employee Dashboard](screenshots/03-employee-dashboard.png) | ![Create Incident](screenshots/04-create-incident.png) |
 
+**Employee Incident List**
+
+![Employee Incident List](screenshots/05-employee-incident-list.png)
+
+### 3. Administrator Interface
+
+**Admin Dashboard**
+
+![Admin Dashboard](screenshots/06-admin-dashboard.png)
+
+**Assign Technician**
+
+![Assign Technician](screenshots/07-assign-technician.png)
+
+### 4. Technician Interface
+
+**Technician Dashboard**
+
+![Technician Dashboard](screenshots/08-technician-dashboard.png)
+
+**Update Incident Status**
+
+![Update Incident Status](screenshots/09-update-incident-status.png)
+
+**Resolved Incident**
+
+![Resolved Incident](screenshots/10-resolved-incident.png)
+
+### 5. Technical Verification
+
+**H2 Database**
+
+![H2 Database](screenshots/11-h2-database.png)
+
+**Backend Tests**
+
+![Backend Tests](screenshots/12-backend-tests.png)
+
+**Frontend Build**
+
+![Frontend Build](screenshots/13-frontend-build.png)
 ## Future Improvements
 
 - Improve authorization error handling and security tests.
