@@ -1,77 +1,166 @@
-# SecureDesk — Incident Management System
+# Incident Management System
 
-A full-stack incident management application built with **Spring Boot**, **Spring Security**, **JWT Authentication**, and **React**.
+A web-based incident management application developed with **Spring Boot, Spring Security, JWT, and React**. The application allows employees to report IT incidents, technicians to manage assigned incidents, and administrators to supervise and assign incidents.
 
-SecureDesk provides a role-based platform where employees can report incidents, administrators can assign technicians, and technicians can manage incident resolution.
+---
 
-## Features
+## Project Overview
 
-### Authentication & Security
+The Incident Management System is a full-stack web application designed to simplify the reporting, assignment, and tracking of IT incidents within an organization.
+
+The application implements role-based access control to ensure that each user can access only the functionalities permitted by their role.
+
+Authentication is handled using **JSON Web Tokens (JWT)**, while Spring Security protects the backend REST API. The frontend, developed with React, communicates with the backend through HTTP requests using Axios.
+
+The project demonstrates the implementation of a secure web application based on a layered architecture.
+
+## Main Features
+
 - User registration and login.
 - JWT-based authentication.
-- Password hashing.
-- Stateless session management.
-- Role-based access control (RBAC).
-- Protected frontend routes.
+- Role-based access control.
+- Secure incident creation.
+- Employee access to their own incidents.
+- Administrator access to incident management.
+- Assignment of incidents to technicians.
+- Technician access to assigned incidents.
+- Incident status updates.
+- Protected REST API endpoints.
+- Responsive user interface with React.
 
-### Incident Management
-- Create and report incidents.
-- View personal incidents.
-- Track incident status.
-- Assign incidents to technicians.
-- Update incident status during resolution.
+## User Roles
 
-### User Roles
+The application supports three user roles:
 
 | Role | Permissions |
 |---|---|
-| EMPLOYEE | Create incidents and view personal incidents |
-| TECHNICIAN | View assigned incidents and update their status |
-| ADMIN | View incidents, assign technicians, and manage incident status |
+| EMPLOYEE | Register, log in, create incidents, and view personal incidents. |
+| TECHNICIAN | Log in, view assigned incidents, and update their status. |
+| ADMIN | View incidents, assign incidents to technicians, and access administrative incident operations. |
 
-### Incident Lifecycle
+### Incident Workflow
 
-`OPEN` → `IN_PROGRESS` → `RESOLVED`
+The implemented incident workflow is:
+
+1. An employee creates an incident.
+2. The incident is initially assigned the `OPEN` status.
+3. An administrator assigns the incident to a technician.
+4. The technician updates the incident status to `IN_PROGRESS`.
+5. The technician can mark the incident as `RESOLVED`.
+6. The employee can consult the updated status.
+
+**Implemented statuses:** `OPEN`, `IN_PROGRESS`, `RESOLVED`.
 
 ## Technology Stack
 
 ### Backend
+
 - Java
 - Spring Boot
 - Spring Security
 - Spring Data JPA
-- JWT
+- JWT (JSON Web Token)
 - Maven
 - H2 Database
 
 ### Frontend
+
 - React
-- Vite
-- React Router
+- JavaScript
 - Axios
-- CSS
+- Vite
+- HTML5
+- CSS3
+
+### Development and Testing Tools
+
+- IntelliJ IDEA
+- Git and GitHub
+- Postman
+- Maven
+- npm
+
+## Application Architecture
+
+The application follows a layered architecture:
+
+```text
+                    USER
+                      |
+                      v
+             REACT FRONTEND
+               (Port 5173)
+                      |
+                      v
+               AXIOS CLIENT
+                      |
+               HTTP / JSON
+             Authorization: Bearer JWT
+                      |
+                      v
+             SPRING BOOT BACKEND
+               (Port 8080)
+                      |
+                      v
+              SPRING SECURITY
+                      |
+                      v
+                 JWT FILTER
+                      |
+                      v
+              REST CONTROLLERS
+                /          \
+               v            v
+          AuthService   IncidentService
+               \            /
+                v          v
+                 REPOSITORIES
+                      |
+                      v
+                 H2 DATABASE
+```
+
+### Backend Layers
+
+- **Controllers:** Handle HTTP requests and expose REST API endpoints.
+- **Services:** Implement authentication and incident management business logic.
+- **Repositories:** Handle database operations using Spring Data JPA.
+- **Security:** Manage authentication, JWT validation, and role-based authorization.
+- **Database:** H2 is used for development and testing.
 
 ## Project Structure
 
 ```text
 JWT-Spring-Security-React/
+│
 ├── backend/
 │   ├── src/
 │   │   ├── main/
-│   │   │   └── java/ma/enset/incident_management/
+│   │   │   ├── java/
+│   │   │   │   └── ma/enset/incident_management/
+│   │   │   │       ├── config/
+│   │   │   │       ├── controller/
+│   │   │   │       ├── dto/
+│   │   │   │       ├── entity/
+│   │   │   │       ├── repository/
+│   │   │   │       ├── security/
+│   │   │   │       └── service/
+│   │   │   └── resources/
 │   │   └── test/
 │   └── pom.xml
 │
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   ├── context/
 │   │   ├── pages/
 │   │   ├── services/
-│   │   ├── App.jsx
-│   │   └── main.jsx
+│   │   └── ...
+│   ├── public/
 │   └── package.json
 │
+├── screenshots/
+│
+├── .gitignore
 └── README.md
 ```
 
@@ -79,20 +168,26 @@ JWT-Spring-Security-React/
 
 ### Prerequisites
 
-- Java 17 or compatible version configured for the project.
-- Maven.
-- Node.js and npm.
+Make sure the following tools are installed:
+
+- Java 17 or compatible JDK
+- Maven
+- Node.js and npm
+- Git
 
 ### 1. Clone the repository
 
 ```bash
 git clone https://github.com/houda-eljirari/JWT-Spring-Security-React.git
+```
+
+```bash
 cd JWT-Spring-Security-React
 ```
 
 ### 2. Start the Backend
 
-Open a terminal:
+Navigate to the backend directory:
 
 ```bash
 cd backend
@@ -105,113 +200,121 @@ Configure the JWT secret and activate the development profile.
 ```powershell
 $env:JWT_SECRET = "YOUR_BASE64_ENCODED_SECRET"
 $env:SPRING_PROFILES_ACTIVE = "dev"
+```
+
+Start the Spring Boot application:
+
+```bash
 mvn spring-boot:run
 ```
 
-The backend runs at:
+The backend will be available at:
 
 `http://localhost:8080`
 
-H2 Console:
-
-`http://localhost:8080/h2-console`
-
 ### 3. Start the Frontend
 
-Open another terminal:
+Open another terminal and navigate to the frontend directory:
 
 ```bash
 cd frontend
+```
+
+Install dependencies:
+
+```bash
 npm install
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
 
-The frontend runs at:
+The frontend will be available at:
 
 `http://localhost:5173`
 
-## Development Test Accounts
+### 4. Access the H2 Database
 
-The development profile initializes the following accounts:
+The H2 console is available at:
 
-| Username | Password | Role |
-|---|---|---|
-| admin_test | AdminTest123! | ADMIN |
-| technicien_test | TechnicienTest123! | TECHNICIAN |
+`http://localhost:8080/h2-console`
+
+Development database configuration:
+
+| Property | Value |
+|---|---|
+| JDBC URL | `jdbc:h2:mem:incidentsdb` |
+| Username | `sa` |
+| Password | Leave empty |
+
+**Important:** The project currently uses an in-memory H2 database. Data is reset when the backend application restarts.
+
+## Test Accounts
+
+The development profile initializes the following test accounts:
+
+| Role | Username | Email | Password |
+|---|---|---|---|
+| ADMIN | `admin_test` | `admin_test@example.com` | `AdminTest123!` |
+| TECHNICIAN | `technicien_test` | `technicien_test@example.com` | `TechnicienTest123!` |
 
 An EMPLOYEE account can be created through the registration page.
 
-> These are development credentials only. Do not use them in production.
 
 ## API Endpoints
+
+The following endpoints are implemented in the backend.
 
 ### Authentication
 
 | Method | Endpoint | Description |
 |---|---|---|
-| POST | `/auth/register` | Register a new user |
-| POST | `/auth/login` | Authenticate and receive a JWT |
+| POST | `/auth/register` | Register a new employee |
+| POST | `/auth/login` | Authenticate a user and obtain a JWT |
 
-### Incidents
+### Incident Management
 
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/api/incidents` | Create an incident |
-| GET | `/api/incidents/my` | Get personal incidents |
-| GET | `/api/incidents/{id}` | Get incident details |
-| GET | `/api/incidents/assigned` | Get incidents available to the technician/admin |
-| PUT | `/api/incidents/{id}/status` | Update incident status |
-| PUT | `/api/incidents/{id}/assign` | Assign a technician |
-
-All incident endpoints require JWT authentication. Access is controlled by user roles.
-
-## Testing
-
-### Backend Tests
-
-Run the automated tests:
-
-```bash
-cd backend
-mvn clean test
-```
-
-**Latest verified result:**
-- 11 tests executed.
-- 0 failures.
-- 0 errors.
-- Build successful.
-
-### Frontend Production Build
-
-```bash
-cd frontend
-npm run build
-```
-
-The production build completes successfully with Vite.
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| POST | `/api/incidents` | Create an incident | Authenticated user |
+| GET | `/api/incidents/my` | Retrieve personal incidents | EMPLOYEE |
+| GET | `/api/incidents/{id}` | Retrieve an incident by ID | Authorized user |
+| GET | `/api/incidents/assigned` | Retrieve assigned incidents | TECHNICIAN / ADMIN |
+| PUT | `/api/incidents/{id}/status` | Update incident status | TECHNICIAN / ADMIN |
+| PUT | `/api/incidents/{id}/assign` | Assign an incident to a technician | ADMIN |
 
 ## Application Screenshots
 
-The following screenshots demonstrate the main features and workflows of the Incident Management System.
+The following screenshots illustrate the main application interfaces and the incident management workflow.
 
-### 1. Authentication
+### Authentication
 
-| Login Page | Registration Page |
-|---|---|
-| ![Login Page](screenshots/01-login-page.png) | ![Registration Page](screenshots/02-registration-page.png) |
+**Login Page**
 
-### 2. Employee Interface
+![Login Page](screenshots/01-login-page.png)
 
-| Employee Dashboard | Create Incident |
-|---|---|
-| ![Employee Dashboard](screenshots/03-employee-dashboard.png) | ![Create Incident](screenshots/04-create-incident.png) |
+**Registration Page**
+
+![Registration Page](screenshots/02-registration-page.png)
+
+### Employee Interface
+
+**Employee Dashboard**
+
+![Employee Dashboard](screenshots/03-employee-dashboard.png)
+
+**Create Incident**
+
+![Create Incident](screenshots/04-create-incident.png)
 
 **Employee Incident List**
 
 ![Employee Incident List](screenshots/05-employee-incident-list.png)
 
-### 3. Administrator Interface
+### Administrator Interface
 
 **Admin Dashboard**
 
@@ -221,7 +324,7 @@ The following screenshots demonstrate the main features and workflows of the Inc
 
 ![Assign Technician](screenshots/07-assign-technician.png)
 
-### 4. Technician Interface
+### Technician Interface
 
 **Technician Dashboard**
 
@@ -235,7 +338,7 @@ The following screenshots demonstrate the main features and workflows of the Inc
 
 ![Resolved Incident](screenshots/10-resolved-incident.png)
 
-### 5. Technical Verification
+### Database and Build Verification
 
 **H2 Database**
 
@@ -248,12 +351,57 @@ The following screenshots demonstrate the main features and workflows of the Inc
 **Frontend Build**
 
 ![Frontend Build](screenshots/13-frontend-build.png)
-## Future Improvements
 
-- Improve authorization error handling and security tests.
-- Add pagination and advanced incident filtering.
-- Add incident history and audit logs.
-- Improve automated frontend testing.
-- Add production database configuration.
-- Deploy the application.
+## Postman Tests
 
+Postman was used to test the REST API and verify the main application workflows.
+
+The tests cover:
+
+- Employee registration.
+- User login and JWT generation.
+- Incident creation.
+- Retrieval of personal incidents.
+- Access to protected endpoints without a token.
+- Administrator assignment of an incident to a technician.
+- Retrieval of assigned incidents.
+- Technician status updates.
+- Verification of the resolved incident.
+
+## Automated Tests
+
+Backend tests are executed using Maven:
+
+```bash
+cd backend
+mvn clean test
+```
+
+The previously verified backend test suite completed successfully:
+
+- **11 tests**
+- **0 failures**
+- **0 errors**
+
+Frontend production build:
+
+```bash
+cd frontend
+npm run build
+```
+
+The frontend build was also successfully verified.
+
+## Security
+
+The application integrates several security mechanisms:
+
+- JWT-based authentication.
+- Stateless session management.
+- Password encoding before database storage.
+- Spring Security endpoint protection.
+- Role-based authorization.
+- Validation of JWT tokens on protected requests.
+- Server-side access control for incident operations.
+- CORS configuration for communication with the React frontend.
+- Protection of administrative operations.
