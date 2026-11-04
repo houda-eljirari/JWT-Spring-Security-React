@@ -1,5 +1,4 @@
-@'
-# Java
+﻿# Java
 *.class
 *.log
 
@@ -11,7 +10,7 @@ frontend/node_modules/
 frontend/dist/
 frontend/build/
 
-# Environnement et secrets
+# Environment and secrets
 .env
 .env.*
 !.env.example
@@ -22,7 +21,6 @@ application-local.properties
 .vscode/
 *.iml
 
-# Système
+# System
 .DS_Store
 Thumbs.db
-'@ | Set-Content -Encoding UTF8 .gitignore
